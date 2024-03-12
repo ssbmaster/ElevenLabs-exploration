@@ -1,3 +1,4 @@
+# %%
 import requests
 from pprint import pprint
 
@@ -10,4 +11,7 @@ headers = {
 }
 
 response = requests.get(url, headers=headers)
-pprint(response.json())
+voices = response.json()["voices"]
+pprint(voices)
+
+# %%
