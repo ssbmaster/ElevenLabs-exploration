@@ -1,7 +1,10 @@
 # %%
 import requests
+from dotenv import load_dotenv
+from os import environ
 
-xi_api_key = open(".env", "r").readline().split("=")[1].strip()
+print("Environment variables from .env file loaded:", load_dotenv())
+xi_api_key = environ.get("ELEVEN_API_KEY")
 
 CHUNK_SIZE = 1024
 
@@ -25,13 +28,7 @@ print("Reference audio file to dub:", audio_file)
 with open(audio_file, "rb") as f:
     payload = {
         "audio": f.read(),
-        # "model_id": str(model_id),
-        # "voice_settings":{
-        #     "stability": 0.1,
-        #     "similarity_boost": 1
-        # }
     }
-    # payload = f"-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"audio\"\r\n\r\n{f.read()}\r\n-----011000010111000001101001\r\nContent-Disposition: form-data; name=\"model_id\"\r\n\r\n{model_id}\r\n-----011000010111000001101001--\r\n\r\n"
 
 print("\nGetting the audio response from ElevenLabs...")
 response = requests.post(

@@ -2,13 +2,16 @@
 from elevenlabs.client import ElevenLabs
 from elevenlabs import generate, play, voices, clone, stream, Voice, VoiceSettings
 from pprint import pprint
+from dotenv import load_dotenv
+from os import environ
+
+print("Environment variables from .env file loaded:", load_dotenv())
+xi_api_key = environ.get("ELEVEN_API_KEY")
+client = ElevenLabs(api_key=xi_api_key)
 
 # %%
-xi_api_key = open(".env", "r").readline().split("=")[1].strip()
 # voice_id = "c4TutCiAuWP4vwb1xebb" # Annie-Beth Southern Accent
 voice_id = "XjffbH7iSzh991n23AaG"  # Kelly Teenager
-
-client = ElevenLabs(api_key=xi_api_key)
 
 # %%
 voice_list = voices()
@@ -27,7 +30,6 @@ audio = generate(
     model="eleven_monolingual_v1",
 )
 
-# %%
 play(audio)
 
 # %%
@@ -46,8 +48,8 @@ play(audio)
 # %%
 voice = clone(
     api_key=xi_api_key,  # (Defaults to os.getenv(ELEVEN_API_KEY))
-    name="Myself",
-    description="A male with a Chinese/Canadian accent.",  # Optional
+    name="testing_from_lib",
+    description="A male. Unkown origin.",  # Optional
     # files=["./sample_0.mp3", "./sample_1.mp3", "./sample_2.mp3"],
     files=["./samples/taunt.wav"],
 )
@@ -55,7 +57,6 @@ voice = clone(
 audio = generate(text="Hi", voice=voice)
 print("Save this:", voice.voice_id)
 
-# %%
 play(audio)
 
 
@@ -87,4 +88,5 @@ audio = client.speech_to_speech.convert(
 #     voice_id="string",
 #     optimize_streaming_latency=1,
 # )
+
 # %%

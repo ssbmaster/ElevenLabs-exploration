@@ -1,6 +1,9 @@
 import requests
+from dotenv import load_dotenv
+from os import environ
 
-xi_api_key = open(".env", "r").readline().split("=")[1].strip()
+print("Environment variables from .env file loaded:", load_dotenv())
+xi_api_key = environ.get("ELEVEN_API_KEY")
 
 CHUNK_SIZE = 1024
 
