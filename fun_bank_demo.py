@@ -34,6 +34,7 @@ A: "Thank you for choosing RBC. Have a nice day!"
 conversation = script.split("\n")
 
 # %%
+full_audio = []
 for line in conversation:
     if line.startswith("A:"):
         print("Using advisor voice")
@@ -47,13 +48,26 @@ for line in conversation:
         voice=Voice(
             voice_id=voice_ids.get(line[0]),
             settings=VoiceSettings(
-                stability=0.2,
-                similarity_boost=0.5,
+                stability=0.3,
+                similarity_boost=0.9,
                 style=0.0,
                 use_speaker_boost=True,
             ),
         ),
     )
     play(audio)
+    full_audio.append(audio)
+
+# %%
+if full_audio:
+    output_filename = "fun_bank_demo_output.mp3"
+    print("Audio obtained!\nSaving audio to file:", output_filename)
+    with open(output_filename, "wb") as f:
+        for chunk in full_audio:
+            if chunk:
+                f.write(chunk)
+    print("\nDONE!!!")
+else:
+    print("No audio to save.")
 
 # %%
