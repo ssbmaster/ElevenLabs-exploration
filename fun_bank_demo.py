@@ -36,7 +36,7 @@ conversation = script.split("\n")
 # %%
 use_stream = True
 full_audio = []
-for line in conversation:
+for line in conversation[:2]:
     if line.startswith("A:"):
         print("Using advisor voice")
     elif line.startswith("C:"):
@@ -58,7 +58,7 @@ for line in conversation:
         stream=use_stream,
     )
     if use_stream:
-        stream(audio)
+        audio = stream(audio)
     else:
         play(audio)
     full_audio.append(audio)
