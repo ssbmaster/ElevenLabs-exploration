@@ -1,7 +1,7 @@
 # %%
 # Imports and init
 from elevenlabs.client import ElevenLabs
-from elevenlabs import generate, play, voices, clone, stream, Voice, VoiceSettings
+from elevenlabs import play, voices, stream, Voice, VoiceSettings
 from pprint import pprint
 from dotenv import load_dotenv
 from os import environ
@@ -34,6 +34,7 @@ A: "Thank you for choosing RBC. Have a nice day!"
 conversation = script.split("\n")
 
 # %%
+use_stream = True
 full_audio = []
 for line in conversation:
     if line.startswith("A:"):
@@ -43,7 +44,7 @@ for line in conversation:
     else:
         print("Don't know which voice should I use...")
         continue
-    audio = generate(
+    audio = client.generate(
         text=line[3:],
         voice=Voice(
             voice_id=voice_ids.get(line[0]),
@@ -54,9 +55,13 @@ for line in conversation:
                 use_speaker_boost=True,
             ),
         ),
+        stream=use_stream,
     )
-    play(audio)
-    full_audio.append(audio)
+    if use_stream:
+        stream(audio)
+    else:
+        play(audio)
+
 
 # %%
 if full_audio:
