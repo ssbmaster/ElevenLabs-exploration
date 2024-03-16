@@ -61,6 +61,7 @@ for line in conversation:
         stream(audio)
     else:
         play(audio)
+    full_audio.append(audio)
 
 
 # %%
