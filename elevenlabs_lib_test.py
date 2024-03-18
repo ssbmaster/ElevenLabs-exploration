@@ -1,6 +1,6 @@
 # %%
 from elevenlabs.client import ElevenLabs
-from elevenlabs import generate, play, voices, clone, stream, Voice, VoiceSettings
+from elevenlabs import play, voices, stream, save, Voice, VoiceSettings
 from pprint import pprint
 from dotenv import load_dotenv
 from os import environ
@@ -22,7 +22,7 @@ models = client.models.get_all()
 pprint(models)
 
 # %%
-audio = generate(
+audio = client.generate(
     # api_key="YOUR_API_KEY", (Defaults to os.getenv(ELEVEN_API_KEY))
     text="Hi",
     voice="Rachel",
@@ -33,7 +33,7 @@ audio = generate(
 play(audio)
 
 # %%
-audio = generate(
+audio = client.generate(
     text="Hello",
     voice=Voice(
         voice_id="EXAVITQu4vr4xnSDxMaL",
@@ -46,7 +46,7 @@ audio = generate(
 play(audio)
 
 # %%
-voice = clone(
+voice = client.clone(
     api_key=xi_api_key,  # (Defaults to os.getenv(ELEVEN_API_KEY))
     name="testing_from_lib",
     description="A male. Unkown origin.",  # Optional
@@ -54,10 +54,12 @@ voice = clone(
     files=["./samples/taunt.wav"],
 )
 
-audio = generate(text="Hi", voice=voice)
+audio = client.generate(text="Hi", voice=voice)
 print("Save this:", voice.voice_id)
 
 play(audio)
+
+save(audio, "test_audio_save.mp3")
 
 
 # %%
@@ -66,7 +68,7 @@ def text_stream():
     yield "this is me!"
 
 
-audio_stream = generate(
+audio_stream = client.generate(
     api_key=xi_api_key,  # (Defaults to os.getenv(ELEVEN_API_KEY))
     text=text_stream(),
     voice="Nicole",
