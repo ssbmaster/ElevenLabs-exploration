@@ -1,6 +1,6 @@
 # %%
 from elevenlabs.client import ElevenLabs
-from elevenlabs import play, voices, stream, save, Voice, VoiceSettings
+from elevenlabs import play, stream, save, Voice, VoiceSettings
 from pprint import pprint
 from dotenv import load_dotenv
 from os import environ
@@ -14,7 +14,7 @@ client = ElevenLabs(api_key=xi_api_key)
 voice_id = "XjffbH7iSzh991n23AaG"  # Kelly Teenager
 
 # %%
-voice_list = voices()
+voice_list = client.voices.get_all()
 pprint(voice_list)
 
 # %%

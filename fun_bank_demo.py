@@ -1,8 +1,7 @@
 # %%
 # Imports and init
 from elevenlabs.client import ElevenLabs
-from elevenlabs import play, voices, stream, Voice, VoiceSettings
-from pprint import pprint
+from elevenlabs import play, stream, Voice, VoiceSettings
 from dotenv import load_dotenv
 from os import environ
 
