@@ -19,7 +19,42 @@ generate_audio = True
 use_stream = True
 full_audio = []
 
+config_list = [
+    {
+        "api_key": environ.get("OPENAI_API_KEY"),
+        "model": "gpt-3.5-turbo",
+        "temperature": 0.5,
+    }
+]
+llm_config = {"config_list": config_list, "cache_seed": 100}
 
+customer_agent_system_msg = """
+Your name is Nancy.
+You are a customer of ABC bank.
+When asked for personal information, make sure to let the advisor know that they already have the necessary info in their systems.
+Do not be wordy, be efficient with your words.
+You must not say thank you if you expressed gratitude already.
+If your needs are met, express your gratitude and end the conversation.
+If not, be sure to ask for further assistance."""
+
+advisor_agent_system_msg = """
+Your name is Sal.
+You are an advisor for ABC bank, able to handle all requests from a customer by yourself and love to give relevant advice.
+When you talk, you love using words such as 'anyway' and 'you know'.
+When first greeted, you must introduce yourself by name and role. Then, you briefly go off on a story-telling tangent that relates to the customer request. 
+Always ask a question related to the story and wait for a reply before continuing.
+You must complete the customer request on the spot by first asking for pertinent other details to determine the exact client needs. Wait for a reply first.
+Then, proceed by replying 'OK, give me a moment to process your request <break time="2.0s" />, and then assume the computer has done it right away.
+Before you end the conversation, always try to upsell other products.
+At the end of the conversation, be sure to ask if there is anything else the client needs.
+If there isn't anything else the client needs, thank the client for their business, then you must end the conversation with the word GOODBYE."""
+
+customer_initial_message = """Hi, I have a couple things I need done today.
+1. I need to get a new credit card.  Please help me obtain the appropriate one.
+2. Turns out, I have a large sum of money, about $50000.  I would like to invest it. Please recommend something to me."""
+
+
+# %%
 def convert_to_audio_and_play(sender, message):
     audio = client.generate(
         text=message.get("content"),
@@ -57,36 +92,6 @@ def message_intercept(recipient, messages, sender, config):
 
 
 # %%
-config_list = [
-    {
-        "api_key": environ.get("OPENAI_API_KEY"),
-        "model": "gpt-3.5-turbo",
-        "temperature": 0.5,
-    }
-]
-llm_config = {"config_list": config_list, "cache_seed": 100}
-
-customer_agent_system_msg = """
-Your name is Nancy.
-You are a customer of ABC bank.
-When asked for personal information, make sure to let the advisor know that they already have the necessary info in their systems.
-Do not be wordy, be efficient with your words.
-You must not say thank you if you expressed gratitude already.
-If your needs are met, express your gratitude and end the conversation.
-If not, be sure to ask for further assistance."""
-
-advisor_agent_system_msg = """
-Your name is Sal.
-You are an advisor for ABC bank, able to handle all requests from a customer by yourself and love to give relevant advice.
-When first greeted, you must introduce yourself by name and role. Then, you briefly go off on a story-telling tangent that relates to the customer request. 
-Always ask a question related to the story and wait for a reply before continuing.
-After that, proceed with the customer request by starting with 'Anyway'.
-You must complete the customer request on the spot by first asking for pertinent other details to determine the exact client needs. Wait for a reply first.
-Then, proceed by replying 'OK, give me a moment to process your request <break time="2.0s" />, and then assume the computer has done it right away.
-Before you end the conversation, always try to upsell other products.
-At the end of the conversation, be sure to ask if there is anything else the client needs.
-If there isn't anything else the client needs, thank the client for their business, then you must end the conversation with the word GOODBYE."""
-
 customer_agent = ConversableAgent(
     name="Customer_Agent",
     system_message=customer_agent_system_msg,
@@ -116,9 +121,7 @@ advisor_agent.register_reply(
 # %%
 chat_result = customer_agent.initiate_chat(
     advisor_agent,
-    message="""Hi, I have a couple things I need done today.
-    1. I need to get a new credit card.  Please help me obtain the appropriate one.
-    2. Turns out, I have a large sum of money, about $50000.  I would like to invest it. Please recommend something to me.""",
+    message=customer_initial_message,
     summary_method="reflection_with_llm",
 )
 
