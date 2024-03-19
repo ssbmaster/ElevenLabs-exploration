@@ -15,6 +15,7 @@ voice_ids = {
     "Advisor_Agent": "oKfpvrXhc2R700cMocpW",
     "Customer_Agent": "c4TutCiAuWP4vwb1xebb",
 }
+generate_audio = True
 use_stream = True
 full_audio = []
 
@@ -47,11 +48,11 @@ def check_term_msg(content) -> bool:
 
 
 def message_intercept(recipient, messages, sender, config):
-    print(f"Messages sent from: {sender.name}", flush=True)
     if "callback" in config and config["callback"] is not None:
         callback = config["callback"]
         callback(sender, recipient, messages[-1])
-    convert_to_audio_and_play(sender, messages[-1])
+    if generate_audio:
+        convert_to_audio_and_play(sender, messages[-1])
     return False, None  # Required to pass through to next step. Don't know why.
 
 
