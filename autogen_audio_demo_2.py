@@ -51,7 +51,7 @@ def message_intercept(recipient, messages, sender, config):
     if "callback" in config and config["callback"] is not None:
         callback = config["callback"]
         callback(sender, recipient, messages[-1])
-    # convert_to_audio_and_play(sender, messages[-1])
+    convert_to_audio_and_play(sender, messages[-1])
     return False, None  # Required to pass through to next step. Don't know why.
 
 
